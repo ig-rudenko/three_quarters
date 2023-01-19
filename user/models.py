@@ -4,7 +4,8 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     phone = models.PositiveBigIntegerField(null=True)
-    about = models.TextField(null=True)
+    hobby = models.CharField(max_length=255, null=True)
+    address = models.CharField(max_length=255, null=True)
 
-    class Meta(AbstractUser.Meta):
-        db_table = "users"
+    class Meta:
+        db_table = "user"

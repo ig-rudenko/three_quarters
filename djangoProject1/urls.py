@@ -21,7 +21,7 @@ from django.urls import path, re_path, include
 urlpatterns = [
     path("admin/", admin.site.urls),
 
-    re_path("", include("books.urls"))
+    re_path("", include("media_docs.urls"))
 ]
 
 if settings.DEBUG:
