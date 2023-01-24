@@ -8,6 +8,11 @@ __pycache__/
 */migrations/[0-9]*
 media
 .idea
+static/admin
+static/ckeditor
+/*/migrations/
+test.py
+
 
 # C extensions
 *.so

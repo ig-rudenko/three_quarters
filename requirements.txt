@@ -2,3 +2,5 @@ Django
 Pillow
 psycopg2
 Faker
+django-ckeditor
+django-filter

@@ -9,4 +9,7 @@ urlpatterns = [
 
     path("journal/<slug:journal_slug>", views.DetailJournalView.as_view(), name="show-journal"),
     path("journal/", views.JournalView.as_view(), name="journal"),
+
+    path("comics/<slug:comics_slug>", views.DetailComicsView.as_view(), name="show-comics"),
+    path("comics/", views.ComicsView.as_view(), name="comics"),
 ]

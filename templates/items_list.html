@@ -1,15 +1,11 @@
 {% extends 'base.html' %}
 {% load static humanize %}
 
-{% block content-head %}
-<div style="background-image: url('{% static image %}'); padding: 150px">
-<h1 class="text-light">{{ category }}</h1>
-</div>
+{% block links %}
 
 {% endblock %}
 
-
-{% block content %}
+{% block content-head %}
 <style>
 .card-image {
     background-size: contain;
@@ -18,17 +14,66 @@
     background-position: center;
 }
 </style>
+{% endblock %}
 
-<div class="album py-5 bg-light">
-<div class="container">
 
-  <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
+{% block content %}
+
+<div style="background-image: url('{% static category.image %}'); padding: 150px">
+    <h1 class="text-light"><span>{{ category.name }}</span></h1>
+</div>
+
+<div class="bd-layout my-md-4">
+
+<aside class="bd-sidebar card py-5" style="margin-left: 10px; top: 2rem">
+
+    <div class="container">
+        <h3 class="text-center">Фильтрация</h3>
+        <form>
+            <div class="mb-3">
+                <input class="form-control" type="text" name="s" id="search-input" value="{{ request.GET.s }}">
+                <div class="form-text">Поиск по названию или описанию</div>
+            </div>
+            <div class="mb-3">
+                <input class="form-control" type="text" name="author" id="author-input" value="{{ request.GET.author }}">
+                <div class="form-text">Автор</div>
+            </div>
+            <div class="mb-3">
+                <select class="form-select" name="year">
+                    <option>Выберите год</option>
+                    {% for line in available_years %}
+                      <option value="{{ line.year }}" {% if request.GET.year == line.year|stringformat:"i" %}selected{% endif %}>
+                          {{ line.year }}
+                      </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Фильтровать</button>
+        </form>
+    </div>
+
+</aside>
+
+
+<main class="order-1" style="padding: 20px">
+
+<div class="bd-content ps-lg-2">
+
+  <div class="row align-items-stretch g-4 py-5">
 
     {% for item in items %}
-        <div class="col">
+        <div class="col-md-4">
         <div class="card-image card-cover h-100 overflow-hidden rounded-4 shadow-lg"
              style="background-image: url('{{ item.image.url }}');">
-          <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+
+          <div class="d-flex flex-column h-100 p-3 pb-3 text-white text-shadow-1">
+            <ul>
+                <li>
+                    {% for tag in item.tags.all %}
+                    <a href="/{{ category.type }}?tags={{ tag.name }}" class="badge bg-primary">{{ tag.name }}</a>
+                    {% endfor %}
+                </li>
+            </ul>
 
             <ul class="d-flex list-unstyled mt-auto" style="padding: 10px; background-color: #121212; border-radius: 10px;">
               <li class="d-flex text-center me-3">
@@ -60,6 +105,9 @@
     {% endfor %}
 
   </div>
+
 </div>
+</main>
 </div>
+
 {% endblock %}

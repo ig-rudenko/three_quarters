@@ -34,7 +34,13 @@
         </ul>
         <br>
 
-        <p class="card-text"></p><p>{{ item.about }}</p><p></p>
+        <div>
+            {% for tag in item.tags.all %}
+            <span class="badge bg-primary">{{ tag.name }}</span>
+            {% endfor %}
+        </div>
+
+        <p class="card-text"></p><p>{{ item.about | safe }}</p><p></p>
         <br>
 
         <p class="card-text">
