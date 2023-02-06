@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     "django_filters",
     "media_docs",
     "user",
-    "ckeditor"
+    "ckeditor",
+    "crispy_forms",
+    "crispy_bootstrap5",
 ]
 
 MIDDLEWARE = [
@@ -74,18 +76,20 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "djangoProject1.wsgi.application"
 AUTH_USER_MODEL = "user.User"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': "lesson22",
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "lesson22",
         "USER": "test_django_app_user",
         "PASSWORD": "password",
         "HOST": "127.0.0.1",
-        "PORT": "5432"
+        "PORT": "5432",
     }
 }
 
@@ -125,9 +129,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = "static/"
-STATICFILES_DIRS = [
-    BASE_DIR / "static"
-]
+STATICFILES_DIRS = [BASE_DIR / "static"]
 # STATIC_ROOT = BASE_DIR / "static"
 
 MEDIA_URL = "/media/"
@@ -139,16 +141,30 @@ MEDIA_ROOT = "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
 CKEDITOR_BASEPATH = "static/ckeditor/ckeditor/"
 CKEDITOR_UPLOAD_PATH = MEDIA_ROOT + "/uploads"
 CKEDITOR_CONFIGS = {
-    'default': {
-        'toolbar': 'Custom',
-        'toolbar_Custom': [
-            ['Bold', 'Italic', 'Underline'],
-            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Link', 'Unlink'],
-            ['RemoveFormat', 'Source']
-        ]
+    "default": {
+        "toolbar": "Custom",
+        "toolbar_Custom": [
+            ["Bold", "Italic", "Underline"],
+            [
+                "NumberedList",
+                "BulletedList",
+                "-",
+                "Outdent",
+                "Indent",
+                "-",
+                "JustifyLeft",
+                "JustifyCenter",
+                "JustifyRight",
+                "JustifyBlock",
+            ],
+            ["Link", "Unlink"],
+            ["RemoveFormat", "Source"],
+        ],
     }
 }

@@ -17,14 +17,23 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, re_path, include
+from user import views as user_views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
 
     re_path("", include("media_docs.urls")),
 
+    path("accounts/register", user_views.register, name="sign-up"),
+    path("accounts/", include("django.contrib.auth.urls")),
+
     path('ckeditor/', include('ckeditor_uploader.urls')),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+#
+# urlpatterns += [
+#     path("ckeditor5/", include('django_ckeditor_5.urls')),
+# ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {# ЗАГОЛОВОК #}
+              <div class="mb-3">
+                <label for="id-title" class="form-label">Заголовок</label>
+                <input required type="text" name="title" class="form-control" id="id-title">
+              </div>
+            {# IMAGE #}
+              <div class="mb-3">
+                <label for="id-image" class="form-label">Картинка</label>
+                <input required type="file" name="image" class="form-control" id="id-image">
+              </div>
+            {# AUTHOR #}
+              <div class="mb-3">
+                <label for="id-author" class="form-label">Автор</label>
+                <input type="text" name="author" class="form-control" id="id-author">
+              </div>
+            {# YEAR #}
+              <div class="mb-3">
+                <label for="id-year" class="form-label">Год выпуска</label>
+                <input type="number" name="year" class="form-control" id="id-year">
+              </div>
+            {# FILE #}
+              <div class="mb-3">
+                <label for="id-file" class="form-label">Файл</label>
+                <input type="file" name="file" class="form-control" id="id-file">
+              </div>
+            {# ABOUT #}
+              <div class="mb-3">
+                <label for="id-about" class="form-label">Кратное описание</label>
+                <textarea name="about" id="id-about" class="form-control"></textarea>
+              </div>
+
+            <button type="submit" class="btn btn-success">
+                OK
+            </button>
+        </form>
+    </div>
+{% endblock %}
