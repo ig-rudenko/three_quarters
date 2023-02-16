@@ -27,6 +27,8 @@ urlpatterns = [
     path("accounts/register", user_views.register, name="sign-up"),
     path("accounts/", include("django.contrib.auth.urls")),
 
+    path('activate/<uid>/<token>/', user_views.activate, name='activate'),
+
     path('ckeditor/', include('ckeditor_uploader.urls')),
 ]
 
