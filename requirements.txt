@@ -1,6 +1,7 @@
-Django
+Django>=4.1.5
 Pillow
 psycopg2
 Faker
-django-ckeditor
-django-filter
+django-ckeditor>=6.5.1
+django-filter>=22.1
+djangorestframework>=3.14.0

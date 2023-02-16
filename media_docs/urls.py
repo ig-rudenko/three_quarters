@@ -1,10 +1,14 @@
-from django.urls import path
+from django.urls import path, include
 from django.views.generic import TemplateView
 from . import views
+
+
+# /
 
 urlpatterns = [
     path("", TemplateView.as_view(template_name="home.html"), name="home"),
 
+    path("api/v1/", include("media_docs.api.v1.urls")),
 
     path("books/create", views.CreateBookView.as_view(), name="create-book"),
     path("books/<slug:book_slug>", views.DetailBookView.as_view(), name="show-book"),

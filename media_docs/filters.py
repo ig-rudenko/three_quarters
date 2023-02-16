@@ -4,7 +4,7 @@ from django.db.models import Q
 
 class MediaDocsFiler(django_filters.FilterSet):
 
-    s = django_filters.CharFilter(method="search_filter")
+    search = django_filters.CharFilter(method="search_filter")
     author = django_filters.CharFilter(lookup_expr="icontains")
     year = django_filters.NumberFilter()
     tags = django_filters.CharFilter(field_name="tags__name")

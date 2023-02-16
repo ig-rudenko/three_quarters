@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from .models import Book, Tags
 
 
-class TagsField(forms.IntegerField):
+class TagsField(forms.CharField):
     def to_python(self, value: str):
         """
         value == 'python, mysql, django'
@@ -22,10 +22,6 @@ class BookForm(forms.ModelForm):
     class Meta:
         model = Book
         fields = ["title", "image", "author", "year", "file", "tags", "about"]
-
-    def clean_about(self):
-        if len(self.cleaned_data["about"]):
-            raise ValidationError("Укажите описание")
 
     def save(self, commit=True):
         # До сохранения self.cleaned_data["tags"] имеет тип list[str]

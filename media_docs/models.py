@@ -42,6 +42,10 @@ class DocBaseAbstract(models.Model):
     image = models.ImageField(upload_to=file_path)
     file = models.FileField(upload_to=file_path)
 
+    def file_size(self):
+        # Размер файла
+        return "2.1 Мб"
+
     class Meta:
         abstract = True
         ordering = ["created"]
@@ -52,6 +56,9 @@ class Tags(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
+        return self.name
+
+    def __repr__(self):
         return self.name
 
 
