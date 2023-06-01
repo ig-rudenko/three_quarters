@@ -11,7 +11,6 @@ class DetailItemView(generic.DetailView):
 class ListItemView(generic.ListView):
     template_name = "items_list.html"
     context_object_name = "items"
-    queryset = Book.objects.all().select_related("uploaded_by")
     image = ""
     category_name = ""
 

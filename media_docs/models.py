@@ -9,7 +9,7 @@ from django.template.defaultfilters import slugify
 
 def file_path(instance, file_name: str) -> str:
 
-    # "Название класса (lower)" / "title" / "file_name"
+    # `MEDIA_ROOT` / "Название класса (lower)" / "slug" / "file_name"
     return "/".join([instance.__class__.__name__.lower(), instance.slug, file_name])
 
 
@@ -25,7 +25,7 @@ class DocBaseAbstract(models.Model):
 
     # URL no slug = '/books/4123/update'
     # URL + slug  = '/books/python-learn-2022/update'
-    slug = models.SlugField(max_length=100, blank=True, unique=True)
+    slug = models.SlugField(max_length=100, blank=True)
 
     image = models.ImageField(upload_to=file_path, blank=True, null=True)
     file = models.FileField(upload_to=file_path)
@@ -81,15 +81,25 @@ def create_slug(sender, instance: DocBaseAbstract, **kwargs):
 @receiver([post_save], sender=Journal)
 @receiver([post_save], sender=Book)
 def create_preview_image(sender, instance: DocBaseAbstract, created, **kwargs):
-    if created:
+    if created:  # Если это создание нового объекта
+
+        # Путь к файлу "книги".
         file_object_path = pathlib.Path(instance.file.path)
+
+        # Желаемый путь к превью
         image_object_path = file_object_path.parent / "preview.png"
 
+        # Создаем на основе 1й страницы картинку preview.png
+        # библиотека - PyMuPDF.
         doc = fitz.Document(file_object_path)
         page = doc.load_page(0)
         pix = page.get_pixmap()
         pix.save(image_object_path)
-        instance.image.save("preview.png", image_object_path.open("rb"))
+
+        # Регистрируем превью
+        instance.image.save("preview.png", open(image_object_path, "rb"), save=True)
+
+        # Удаляем старую preview.png
         image_object_path.unlink()
 
 

@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     path("", TemplateView.as_view(template_name="home.html")),
+
     path("books/<slug:item_slug>", views.DetailBookView.as_view(), name="show-book"),
     path("books/", views.BooksView.as_view(), name="books"),
 
