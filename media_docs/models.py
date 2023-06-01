@@ -1,7 +1,7 @@
 import pathlib
 
+import fitz
 from django.db import models
-
 from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_save, pre_delete
 from django.template.defaultfilters import slugify
@@ -27,8 +27,11 @@ class DocBaseAbstract(models.Model):
     # URL + slug  = '/books/python-learn-2022/update'
     slug = models.SlugField(max_length=100, blank=True, unique=True)
 
-    image = models.ImageField(upload_to=file_path)
+    image = models.ImageField(upload_to=file_path, blank=True, null=True)
     file = models.FileField(upload_to=file_path)
+
+    def __str__(self):
+        return f"{self.__class__.__name__}: {self.title}"
 
     class Meta:
         abstract = True
@@ -37,6 +40,9 @@ class DocBaseAbstract(models.Model):
 
 class Tags(models.Model):
     name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Book(DocBaseAbstract):
@@ -74,17 +80,17 @@ def create_slug(sender, instance: DocBaseAbstract, **kwargs):
 @receiver([post_save], sender=Comics)
 @receiver([post_save], sender=Journal)
 @receiver([post_save], sender=Book)
-def clean_files(sender, instance: DocBaseAbstract, created, **kwargs):
-    if not created:
+def create_preview_image(sender, instance: DocBaseAbstract, created, **kwargs):
+    if created:
+        file_object_path = pathlib.Path(instance.file.path)
+        image_object_path = file_object_path.parent / "preview.png"
 
-        image_file = instance.image.path
-        object_file = instance.file.path
-
-        files = pathlib.Path(object_file).parent.glob("*")
-
-        for file in files:
-            if str(file.absolute()) not in [image_file, object_file]:
-                file.unlink()
+        doc = fitz.Document(file_object_path)
+        page = doc.load_page(0)
+        pix = page.get_pixmap()
+        pix.save(image_object_path)
+        instance.image.save("preview.png", image_object_path.open("rb"))
+        image_object_path.unlink()
 
 
 @receiver([pre_delete], sender=Comics)

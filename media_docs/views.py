@@ -1,53 +1,51 @@
-from django.shortcuts import render, get_object_or_404
-from django.views import View
+from django.views import generic
 from .models import Book, Journal, Comics
 
 
-class BooksView(View):
-    def get(self, request):
-        return render(
-            request,
-            "items_list.html",
-            {
-                "items": Book.objects.all().select_related("uploaded_by"),
-                "image": "img/books.png",
-                "category": "Книги",
-            },
+class DetailItemView(generic.DetailView):
+    slug_url_kwarg = "item_slug"
+    context_object_name = "item"
+    template_name = "show_item.html"
+
+
+class ListItemView(generic.ListView):
+    template_name = "items_list.html"
+    context_object_name = "items"
+    queryset = Book.objects.all().select_related("uploaded_by")
+    image = ""
+    category_name = ""
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        return super().get_context_data(
+            object_list=object_list, image=self.image, category=self.category_name
         )
 
 
-class DetailBookView(View):
-    def get(self, request, book_slug: str):
-        book = get_object_or_404(Book, slug=book_slug)
-        return render(
-            request,
-            "show_item.html",
-            {
-                "item": book,
-            },
-        )
+class BooksView(ListItemView):
+    queryset = Book.objects.all().select_related("uploaded_by")
+    image = "img/books.png"
+    category_name = "Книги"
 
 
-class JournalView(View):
-    def get(self, request):
-        return render(
-            request,
-            "items_list.html",
-            {
-                "items": Journal.objects.all().select_related("uploaded_by"),
-                "image": "img/journal.png",
-                "category": "Статьи"
-            },
-        )
+class DetailBookView(DetailItemView):
+    model = Book
 
 
-class DetailJournalView(View):
-    def get(self, request, journal_slug: str):
-        journal = get_object_or_404(Journal, slug=journal_slug)
-        return render(
-            request,
-            "show_item.html",
-            {
-                "item": journal,
-            },
-        )
+class JournalView(ListItemView):
+    queryset = Journal.objects.all().select_related("uploaded_by")
+    image = "img/journal.png"
+    category_name = "Журналы"
+
+
+class DetailJournalView(DetailItemView):
+    model = Journal
+
+
+class ComicsView(ListItemView):
+    queryset = Comics.objects.all().select_related("uploaded_by")
+    image = "img/comics.png"
+    category_name = "Комиксы"
+
+
+class DetailComicsView(DetailItemView):
+    model = Comics
